@@ -114,4 +114,53 @@ df_books = spark.read.format('delta').option("inferSchema", True).load('dbfs:/us
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC # Selecting collumns
+# MAGIC In this session we'll explore how to select and manipulate columns with PySpark.
+# MAGIC We are going to use NYC trip datasets, that is stored as compressed CSV to illustrate the commands.
 
+# COMMAND ----------
+
+# MAGIC %fs ls dbfs:/databricks-datasets/
+
+# COMMAND ----------
+
+# MAGIC %fs ls dbfs:/databricks-datasets/nyctaxi/tripdata/green/
+
+# COMMAND ----------
+
+df_nyc_taxi_green = spark.read.format('csv').option("header", True).load('dbfs:/databricks-datasets/nyctaxi/tripdata/green/')
+
+# COMMAND ----------
+
+df_nyc_taxi_green.count()
+
+# COMMAND ----------
+
+display(df_nyc_taxi_green)
+
+# COMMAND ----------
+
+df_nyc_taxi_green.printSchema()
+
+# COMMAND ----------
+
+len(df_nyc_taxi_green.columns)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC As we can see, this is a large dataset with 21 columns. <br>
+# MAGIC So we use the `select` method to restrict the desired columns.
+
+# COMMAND ----------
+
+df_nyc_taxi_green_select = df_nyc_taxi_green.select(["VendorID","lpep_pickup_datetime", "Trip_distance", "Fare_amount", "Passenger_count", "Tip_amount"])
+
+# COMMAND ----------
+
+display(df_nyc_taxi_green_select)
+
+# COMMAND ----------
+
+As we can see we created a new DataFrame selecting the desired columns.<br>
