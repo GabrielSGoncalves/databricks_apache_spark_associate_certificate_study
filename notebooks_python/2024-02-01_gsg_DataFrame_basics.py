@@ -81,4 +81,37 @@ df_books = spark.read.format('delta').schema(books_schema).load('dbfs:/user/hive
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC We can also use the StructType to define the schema
+
+# COMMAND ----------
+
+from pyspark.sql.types import StructType, StructField, StringType, DoubleType
+
+custom_schema = StructType([
+    StructField("book_id", StringType(), True),
+    StructField("title", StringType(), True),
+    StructField("author", StringType(), True),
+    StructField("category", StringType(), True),
+    StructField("price", DoubleType(), True)
+])
+
+# Define the file path
+file_path = "dbfs:/user/hive/warehouse/books"
+
+# Read the CSV file with the specified schema
+df_books = spark.read.csv(file_path, schema=custom_schema)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC We can also set Spark Reader to infer the schema. It can take longer as Spark is reading and inferring the dtype for each column.<br>
+# MAGIC For a production pipeline, always define the schema when reading files.
+
+# COMMAND ----------
+
+df_books = spark.read.format('delta').option("inferSchema", True).load('dbfs:/user/hive/warehouse/books')
+
+# COMMAND ----------
+
 
