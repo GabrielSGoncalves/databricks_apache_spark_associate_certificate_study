@@ -163,4 +163,80 @@ display(df_nyc_taxi_green_select)
 
 # COMMAND ----------
 
-As we can see we created a new DataFrame selecting the desired columns.<br>
+# MAGIC %md
+# MAGIC As we can see we created a new DataFrame selecting the desired columns.<br>
+# MAGIC There other ways to select columns from a DataFrame, using the column objects from Spark, `col` or `column`. 
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col, column
+
+df_nyc_taxi_green_select2 = df_nyc_taxi_green.select(
+    col("VendorID"),
+    col("lpep_pickup_datetime"),
+    col("Trip_distance"), 
+    col("Fare_amount"),
+    col("Passenger_count"),
+    col("Tip_amount")
+    )
+display(df_nyc_taxi_green_select2)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC And finally, you can also use a SQL expression to select columns from a DataFrame by leveraging the `selectExpr` method.
+
+# COMMAND ----------
+
+display(df_nyc_taxi_green.selectExpr(
+    "lpep_pickup_datetime pickup_dt",
+    "year(lpep_pickup_datetime) year",
+    "month(lpep_pickup_datetime) month",
+    "day(lpep_pickup_datetime) day"
+    ))
+
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Concatenating columns
+# MAGIC Another important operation you can perform over your DataFrame is concatenating columns. You can use both the function `concat` or the `expr`.
+
+# COMMAND ----------
+
+from pyspark.sql.functions import concat, expr
+
+display(df_nyc_taxi_green.select(
+    expr("concat(Store_and_fwd_flag, VendorID) concat_cols"
+         )
+    )
+)
+        
+
+# COMMAND ----------
+
+display(df_nyc_taxi_green.select(
+    concat(
+        df_nyc_taxi_green.Store_and_fwd_flag, 
+        df_nyc_taxi_green.VendorID
+        )
+         )
+    )
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Renaming columns
+# MAGIC To rename columns of a DataFrame we can use the method `withColumnRename`. Important to note that if you specify a column name that does not exist, Apache Spark won't change anything over your DataFrame.
+
+# COMMAND ----------
+
+df_nyc_taxi_green.columns
+
+# COMMAND ----------
+
+display(df_nyc_taxi_green.withColumnRenamed("VendorID", "VendorIdentifier"))
+
+# COMMAND ----------
+
+
