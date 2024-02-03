@@ -276,4 +276,100 @@ df_nyc_taxi_green.printSchema()
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Adding new columns to a DataFrame
+# MAGIC One important operations you must master is creating/adding new columns to a DataFrame.
+# MAGIC To do it, you must leverage the `withColumn` expression, and pass a column object to the DataFrame.
+# MAGIC For instance, if you want to create a new column with the same string value for all rows, you need to import the `lit` to do it.
+
+# COMMAND ----------
+
+from pyspark.sql.functions import lit
+df_nyc_taxi_green_add_col = df_nyc_taxi_green.withColumn("new_col", lit("literal string"))
+display(df_nyc_taxi_green_add_col.select("new_col"))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC We can create new columns based on existing columns operations like transformations or concatenations.
+
+# COMMAND ----------
+
+df_nyc_taxi_green_add_col_concat = df_nyc_taxi_green.withColumn(
+    "concat_columns", concat(
+        df_nyc_taxi_green.Store_and_fwd_flag, 
+        df_nyc_taxi_green.VendorID
+        )
+         )
+display(df_nyc_taxi_green_add_col_concat.select("concat_columns"))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Removing columns from a DataFrame
+# MAGIC Dropping columns is another essencial operation when processing data through the DataFrame API.
+# MAGIC To do it, you simply need to use the `drop` command and specify the name of the columns. You can use both a string with the name of the columns, or columns Objects (`col`).<br>
+# MAGIC Important to note that if you pass a column name that's not in the DataFrame schema, nothing will happen, you would get the DataFrame with the original columns, in other words, Spark won't raise an error.
+
+# COMMAND ----------
+
+df_nyc_taxi_green.printSchema()
+
+# COMMAND ----------
+
+df_nyc_taxi_green_drop_col = df_nyc_taxi_green.drop(
+    "VendorID", 
+    "lpep_pickup_datetime",
+    "Lpep_dropoff_datetime",
+    "Store_and_fwd_flag"
+)
+df_nyc_taxi_green_drop_col.printSchema()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col
+df_nyc_taxi_green_drop_col = df_nyc_taxi_green.drop(
+    col("VendorID"), 
+    col("lpep_pickup_datetime"),
+    col("Lpep_dropoff_datetime"),
+    col("Store_and_fwd_flag"),
+    col("123") # this column does not exist, but it does not affect the result
+)
+df_nyc_taxi_green_drop_col.printSchema()
+
+# COMMAND ----------
+
+df_nyc_taxi_green_drop_col.printSchema()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Arithmetic operations
+# MAGIC To expand the possibilities of data manipulation for your Spark DataFrame, you can perform arithmetic over your columns.
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col
+df_nyc_taxi_green_numeric = df_nyc_taxi_green.select(
+    col("VendorID").cast('integer'),
+    col("lpep_pickup_datetime").cast('timestamp'),
+    col("Fare_amount").cast('double'),
+    col("Tip_amount").cast('double'),
+    col("Trip_distance").cast('double')
+    )
+display(df_nyc_taxi_green_numeric)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Let's now convert the column `Trip_distance` from miles to kilometers.
+
+# COMMAND ----------
+
+df_nyc_taxi_green_numeric = df_nyc_taxi_green_numeric.withColumn(
+    "Trip_distance_km", col("Trip_distance") * 1.609344)
+display(df_nyc_taxi_green_numeric)
+
+# COMMAND ----------
+
 
