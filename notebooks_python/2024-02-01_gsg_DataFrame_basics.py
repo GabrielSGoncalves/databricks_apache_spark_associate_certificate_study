@@ -239,4 +239,41 @@ display(df_nyc_taxi_green.withColumnRenamed("VendorID", "VendorIdentifier"))
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Changing columns dtypes (casting)
+# MAGIC To change the dtype for a specific column we can use the `cast` method, passing the desired new dtype as parameter.
+
+# COMMAND ----------
+
+df_nyc_taxi_green.printSchema()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col
+
+display(df_nyc_taxi_green.select(col("Fare_amount").cast('double')))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC If we want to change the dtype of a column from an original DataFrame we can use the expression:
+
+# COMMAND ----------
+
+df_nyc_taxi_green = df_nyc_taxi_green.withColumn("Fare_amount", col("Fare_amount").cast("double"))
+df_nyc_taxi_green.printSchema()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC And finally, you can use the `expr` and leverage the SQL synthax.
+# MAGIC -> FIX THIS
+
+# COMMAND ----------
+
+df_nyc_taxi_green = df_nyc_taxi_green.withColumn("Fare_amount", expr("CAST(Fare_amount AS DOUBLE)"))
+df_nyc_taxi_green.printSchema()
+
+# COMMAND ----------
+
 
