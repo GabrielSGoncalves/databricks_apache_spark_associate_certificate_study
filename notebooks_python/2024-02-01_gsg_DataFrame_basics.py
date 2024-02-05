@@ -421,4 +421,16 @@ df_nyc_taxi_green_filtered.count()
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Types of transformations
+# MAGIC Transformations can be divided into Narrow or Wide. <br>
+# MAGIC
+# MAGIC **Narrow transformations** (or dependencies) generate one partition for each original partition (1 to 1 relationship). These types of transformation requires less processing, as there are no shuffles. `filter`, `select`, `union`, `map`, `flatmap`, `mapPartitions` are examples of narrow transformations.
+# MAGIC
+# MAGIC **Wide transformations** require shuffling of data between partitions. These transformations require the exchange of data between partitions and can be more expensive compared to narrow transformations.
+# MAGIC Examples of wide transformations in Spark include `reduceByKey`, `groupByKey`, and `join`.
+# MAGIC
+
+# COMMAND ----------
+
 
