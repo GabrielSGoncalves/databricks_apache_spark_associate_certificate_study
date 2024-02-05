@@ -433,4 +433,26 @@ df_nyc_taxi_green_filtered.count()
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Dropping rows
+# MAGIC Another important transformations to execute over your DataFrame is the ones related to removing duplicates. You can either use the `distinct` or `drop_duplicates`.
+
+# COMMAND ----------
+
+df_distinct = df_nyc_taxi_green_filtered.select(col("VendorID")).distinct()
+
+# COMMAND ----------
+
+display(df_distinct)
+
+# COMMAND ----------
+
+df_drop_dup = df_nyc_taxi_green_filtered.drop_duplicates(["Trip_distance"])
+
+# COMMAND ----------
+
+display(df_drop_dup)
+
+# COMMAND ----------
+
 
