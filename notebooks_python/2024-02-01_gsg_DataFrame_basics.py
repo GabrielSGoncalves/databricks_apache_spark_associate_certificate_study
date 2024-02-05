@@ -372,4 +372,53 @@ display(df_nyc_taxi_green_numeric)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Understanding the DataFrame lineage graph
+# MAGIC Apache Spark executes its commands by optimizing each step and creating a Direct Acyclic Graph in order to return the results as performant as possible. To understand this DAG planning, you can use the command `explain`.
+
+# COMMAND ----------
+
+df_nyc_taxi_green_numeric.explain("formatted")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Types of action commands
+# MAGIC As Apache Spark uses a lazy evalution execution model, it's important to understand the differences between transformations and actions. One way to understand it is by viewing that whenever you execute a transformation to your DataFrame, Apache Spark will only execute it when an action is executed. Apache Spark is "lazy" about transformations, only storing its history, but when an action is called upon a DataFrame, it builds a execution plan contemplating all the transformations, optimizing its order, distribution and shuffling.<br>
+# MAGIC There are 3 types of Apache Spark actions:
+# MAGIC 1. View: display a subset of the DataFrame (`show`)
+# MAGIC 2. Collect: Fetch data from the workers to the driver ()`take`, `takeAsList`, `collect`)
+# MAGIC 3. Write to output: Saves you DataFrame to a specific format (`save`) 
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Filtering rows of a DataFrame
+# MAGIC You can filter your DataFrame based on specific conditions using the `where` or `filter` statement.
+
+# COMMAND ----------
+
+df_nyc_taxi_green_numeric.show(3)
+
+# COMMAND ----------
+
+df_nyc_taxi_green_filtered = df_nyc_taxi_green_numeric.where(col("Fare_amount") > 20)
+display(df_nyc_taxi_green_filtered)
+
+# COMMAND ----------
+
+df_nyc_taxi_green_filtered.count()
+
+# COMMAND ----------
+
+df_nyc_taxi_green_filtered = df_nyc_taxi_green_numeric.filter(col("Fare_amount") == 20)
+display(df_nyc_taxi_green_filtered)
+
+# COMMAND ----------
+
+df_nyc_taxi_green_filtered.count()
+
+# COMMAND ----------
+
 
