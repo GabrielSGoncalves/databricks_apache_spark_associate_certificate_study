@@ -455,4 +455,64 @@ display(df_drop_dup)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Handling null values
+# MAGIC Finding and replacing Null values is another essencial operations when processing data.<br>
+# MAGIC To do it in Apache Spark, we can use the `isNull` and `isNotNull` expression to filter for specific column values.
+# MAGIC
+
+# COMMAND ----------
+
+display(df_nyc_taxi_green_filtered)
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col
+
+df_nyc_taxi_green_filtered_NULL = df_nyc_taxi_green_filtered.where(col("Fare_amount").isNull())
+
+
+# COMMAND ----------
+
+df_nyc_taxi_green_filtered_NULL.show(4)
+
+# COMMAND ----------
+
+df_nyc_taxi_green_filtered.count()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC We can also use the `na.drop(how='all')` or `na.drop(how='any')` to drop rows with all values equals to Null, or rows with any value as Null.<br> 
+# MAGIC We can also specify the parameters `thresh` to stablish to drop rows that have less than thresh non-null values, and `subset` to define the list of collumns to consider.
+
+# COMMAND ----------
+
+df_nyc_taxi_green_filtered.na.drop(how='any').count()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC To fill Null values we can use `na.fill(value)`, where value is an object of the same type of the columns you want to replace (ex str -> str). If you want, you can pass a dictionary in order to map collumns and replace values.
+
+# COMMAND ----------
+
+df_nyc_taxi_green_filtered.na.fill('<NA>')
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Sorting and ordering rows
+# MAGIC Sorting in Apache Spark can be performed using `sort` or `orderBy`.
+
+# COMMAND ----------
+
+df_nyc_taxi_green_sorted = df_nyc_taxi_green_filtered.sort('Tip_amount', ascending=True)
+
+# COMMAND ----------
+
+display(df_nyc_taxi_green_sorted)
+
+# COMMAND ----------
+
 
