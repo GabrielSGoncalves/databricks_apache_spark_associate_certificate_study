@@ -515,4 +515,33 @@ display(df_nyc_taxi_green_sorted)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC # Aggregating data
+# MAGIC In this session, we'll learning how to aggregate data using Apache Spark operations.
+# MAGIC We are going to use the Flights Dataset in order to illustrate the commands below.
+
+# COMMAND ----------
+
+# MAGIC %fs ls dbfs:/databricks-datasets/flights/
+
+# COMMAND ----------
+
+df_flights = spark.read.format('csv').option("header", True).load('dbfs:/databricks-datasets/flights/departuredelays.csv')
+
+# COMMAND ----------
+
+display(df_flights.show(3))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Group by
+# MAGIC To group by your DataFrame with Apache Spark you leverage the `groupBy` command. Group by is an computacional intensive task (wide transformation) as it's performed a shuffle between keys to colocate on the same partitions over workers.
+
+# COMMAND ----------
+
+df_flights.groupBy('destination').count().sort('count', ascending=False).show()
+
+# COMMAND ----------
+
 
