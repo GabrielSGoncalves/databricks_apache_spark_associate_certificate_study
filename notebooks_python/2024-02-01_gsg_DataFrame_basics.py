@@ -544,4 +544,32 @@ df_flights.groupBy('destination').count().sort('count', ascending=False).show()
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ## DataFrame Statistics
+# MAGIC In order to get general statistics for your DataFrame you can use `describe` or `summary`(more details).<br>
+# MAGIC You can also apply Spark functions like `max`, `min`, `mean`, `stddev` and `count` to calculate the metrics for desired columns.
+# MAGIC
+
+# COMMAND ----------
+
+df_flights.describe().show()
+
+# COMMAND ----------
+
+df_flights.summary().show()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import min, max, avg, mean, count
+df_flights.agg(
+    min('distance'),
+    max('distance'),
+    avg('distance'),
+    mean('distance'),
+    count('distance'),
+).show()
+
+
+# COMMAND ----------
+
 
