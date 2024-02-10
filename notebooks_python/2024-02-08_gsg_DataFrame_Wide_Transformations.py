@@ -56,4 +56,12 @@ df_flights.agg(
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ## Joining DataFrames
+# MAGIC To join DataFrame in Apache Spark we can use the `join` expression.<br>
+# MAGIC You can specify the keys using the `df1.join(df2, df1.key1 == df2.key2, 'inner/outer/cross/full/etc')`, when the keys used are have different names, or just pass the name of the collumns if it's shared by both DataFrames.<br>
+# MAGIC The third parameter for the `join` expression is the `how` where you define between different types of merges.
+
+# COMMAND ----------
+
 
