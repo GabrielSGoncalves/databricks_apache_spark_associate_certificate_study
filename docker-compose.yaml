@@ -4,15 +4,11 @@ services:
     image: "jupyter/pyspark-notebook:spark-3.5.0"
     working_dir: /home/app/
     volumes:
-      - /home/gabriel/Documents/Repositories/databricks_apache_spark_associate_certificate_study:/home/app/
-      - /home/gabriel/Documents/Repositories/databricks_apache_spark_associate_certificate_study/app/lib:/opt/spark/jars
+      - ../databricks_apache_spark_associate_certificate_study:/home/app/
+      - ../databricks_apache_spark_associate_certificate_study/app/lib:/opt/spark/jars
     ports:
-      - 8888:8888  # Port for Jupyter Notebook
-      - 4040:4040  # Port for Spark UI
-    # environment:
-    #   - "SPARK_LOCAL_IP=spark-master"
-    #   - "SPARK_HOME=/usr/local/spark"
-    #   - "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64"
+      - 8888:8888 # Port for Jupyter Notebook
+      - 4040:4040 # Port for Spark UI
     command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
     networks:
       - default
